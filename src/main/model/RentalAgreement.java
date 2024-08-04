@@ -1,8 +1,9 @@
 package main.model;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Locale;
 
 public class RentalAgreement {
@@ -15,19 +16,19 @@ public class RentalAgreement {
     
     private int chargeDays;
     
-    private Date checkoutDate;
+    private LocalDate checkoutDate;
     
-    private Date dueDate;
+    private LocalDate dueDate;
     
     private double dailyCharge;
     
-    private double preDiscountCharge;
+    private BigDecimal preDiscountCharge;
     
     private int discountPercent;
     
-    private double discountAmount;
+    private BigDecimal discountAmount;
     
-    private double finalCharge;
+    private BigDecimal finalCharge;
     
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
@@ -35,17 +36,40 @@ public class RentalAgreement {
 
     private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance();
 
-    // Set the maximum number of fraction digits to 2 (optional)
 
-	public RentalAgreement(Tool tool, int rentalDays, int discountPercent, Date checkout) {
+	public RentalAgreement(Tool tool, int rentalDays, int discountPercent, LocalDate checkout) {
 		this.tool = tool;
 		this.rentalDays = rentalDays;
 		this.discountPercent = discountPercent;
 		this.checkoutDate = checkout;
 	    PERCENT_FORMAT.setMaximumFractionDigits(0);
+	    
+	    setDueDate(rentalDays, checkoutDate);
+	    
+	}
+	
+	private void setDueDate(int rentalDays, LocalDate checkoutDate) {
+		this.dueDate = 
+	}
+	
+	private void setChargeDays() {
+		
+	}
+	
+	private void setPreDiscountCharge() {
+		BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
+		this.preDiscountCharge = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+	}
+	
+	private void setDiscountAmount() {
+		BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
+		this.discountAmount = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+	}
+	
+	private void setFinalCharge() {
+		this.finalCharge = preDiscountCharge.subtract(discountAmount);
 	}
     
-    // Getter and Setter for tool
     public Tool getTool() {
         return tool;
     }
@@ -58,14 +82,15 @@ public class RentalAgreement {
         return rentalDays;
     }
 
-    public Date getCheckoutDate() {
+    public LocalDate getCheckoutDate() {
         return checkoutDate;
     }
+    
     public double getDailyCharge() {
         return dailyCharge;
     }
 
-    public double getPreDiscountCharge() {
+    public BigDecimal getPreDiscountCharge() {
         return preDiscountCharge;
     }
 
@@ -73,11 +98,11 @@ public class RentalAgreement {
         return discountPercent;
     }
 
-    public double getDiscountAmount() {
+    public BigDecimal getDiscountAmount() {
         return discountAmount;
     }
 
-    public double getFinalCharge() {
+    public BigDecimal getFinalCharge() {
         return finalCharge;
     }
     

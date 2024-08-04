@@ -1,10 +1,12 @@
 package main.model;
 
+import java.math.BigDecimal;
+
 public class ChargeTableEntry {
 
     private ToolType tooltype;
 
-    private double dailyCharge;
+    private BigDecimal dailyCharge;
 
     private boolean weekdayCharge;
 
@@ -13,7 +15,7 @@ public class ChargeTableEntry {
     private boolean holidayCharge;
     
     public ChargeTableEntry(ToolType toolType, 
-    		double dailyCharge, boolean weekdayCharge, 
+    		BigDecimal dailyCharge, boolean weekdayCharge, 
     		boolean weekendCharge, boolean holidayCharge) {
         this.tooltype = toolType;
         this.dailyCharge = dailyCharge;
@@ -26,7 +28,7 @@ public class ChargeTableEntry {
     	return tooltype;
     }
     
-    public double getDailyCharge() {
+    public BigDecimal getDailyCharge() {
     	return dailyCharge;
     }
     

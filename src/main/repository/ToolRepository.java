@@ -1,5 +1,6 @@
 package main.repository;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,11 +23,11 @@ public class ToolRepository {
 		toolSupply.put("JAKR", new Tool("JAKR", ToolType.Jackhammer, "Ridgid"));
 		
 		chargeTable.put(ToolType.Ladder, 
-				new ChargeTableEntry(ToolType.Ladder, 1.99, true, true, false));
+				new ChargeTableEntry(ToolType.Ladder, BigDecimal.valueOf(1.99), true, true, false));
 		chargeTable.put(ToolType.Chainsaw, 
-				new ChargeTableEntry(ToolType.Chainsaw, 1.49, true, false, true));
+				new ChargeTableEntry(ToolType.Chainsaw, BigDecimal.valueOf(1.49), true, false, true));
 		chargeTable.put(ToolType.Jackhammer, 
-				new ChargeTableEntry(ToolType.Jackhammer, 2.99, true, false, false));
+				new ChargeTableEntry(ToolType.Jackhammer, BigDecimal.valueOf(2.99), true, false, false));
 	}
 	
 	public boolean isToolAvailable(String toolCode) {
