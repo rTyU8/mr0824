@@ -8,7 +8,7 @@ import java.time.Month;
  * 
  * @author matthew
  *
- *         Utility class for checking if a given day is a holiday or weekend.
+ * Utility class for checking if a given day is a holiday or weekend.
  */
 public class CalendarUtils {
 

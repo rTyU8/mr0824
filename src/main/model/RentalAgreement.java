@@ -65,6 +65,11 @@ public class RentalAgreement {
         dueDate = checkoutDate.plusDays(rentalDays);
     }
 
+    /**
+     * Determines the number of charge days.
+     * Checks whether the date is a holiday or weekend (which are mutually exclusive).
+     * Holiday or weekend will only be included in count if there is a charge specified.
+     */
     private void setChargeDays() {
         int total = 0;
         for (LocalDate date = checkoutDate; date.isBefore(dueDate); date = date.plusDays(1)) {
@@ -82,17 +87,26 @@ public class RentalAgreement {
         chargeDays = total;
     }
 
+    /**
+     * Pre-discount charge = dailyCharge * chargeDays
+     */
     private void setPreDiscountCharge() {
         BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
         preDiscountCharge = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
+    /**
+     * Discount Amount = Pre-discount charge * Discount percent
+     */
     private void setDiscountAmount() {
         BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
         unroundedResult = unroundedResult.multiply(BigDecimal.valueOf(0.01));
         discountAmount = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
+    /**
+     * Final Charge = Pre-discountCharge - Discount Amount
+     */
     private void setFinalCharge() {
         finalCharge = preDiscountCharge.subtract(discountAmount);
     }
