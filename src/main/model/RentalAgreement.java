@@ -49,7 +49,7 @@ public class RentalAgreement {
 	}
 	
 	private void setDueDate(int rentalDays, LocalDate checkoutDate) {
-		this.dueDate = 
+		this.dueDate = checkoutDate.plusDays(rentalDays);
 	}
 	
 	private void setChargeDays() {
