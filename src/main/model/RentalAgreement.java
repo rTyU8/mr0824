@@ -46,6 +46,7 @@ public class RentalAgreement {
 		this.rentalDays = rentalDays;
 		this.discountPercent = discountPercent;
 		this.checkoutDate = checkout;
+		this.dailyCharge = chargeDetails.getDailyCharge();
 	    PERCENT_FORMAT.setMaximumFractionDigits(0);
 	    
 	    setDueDate();
@@ -78,12 +79,13 @@ public class RentalAgreement {
 	
 	private void setPreDiscountCharge() {
 		BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
-		preDiscountCharge = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+		preDiscountCharge = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
 	private void setDiscountAmount() {
 		BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
-		discountAmount = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+		unroundedResult = unroundedResult.multiply(BigDecimal.valueOf(0.01));
+		discountAmount = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
 	private void setFinalCharge() {
@@ -116,6 +118,10 @@ public class RentalAgreement {
 
     public int getDiscountPercent() {
         return discountPercent;
+    }
+    
+    public int getChargeDays() {
+    	return chargeDays;
     }
 
     public BigDecimal getDiscountAmount() {

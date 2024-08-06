@@ -1,6 +1,8 @@
 package main.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import main.model.ChargeTableEntry;
 import main.model.RentalAgreement;
@@ -15,12 +17,16 @@ public class CheckoutService {
 		repository = new ToolRepository();
 	}
 	
-	public RentalAgreement generateRentalAgreement(String toolCode, int rentalDayCount,
-			int discountPercent, LocalDate checkoutDate) throws Exception {
-		validateInputs(toolCode, rentalDayCount, discountPercent);
+	public RentalAgreement generateRentalAgreement(String toolCode, String rentalDayCount,
+			String discountPercent, String checkoutDate) throws Exception {
+		validateToolCode(toolCode);
 		Tool toolFromCode = repository.getTool(toolCode);
 		ChargeTableEntry chargeDetails = repository.getChargeDetails(toolFromCode.getToolType());
-		RentalAgreement agreement = new RentalAgreement(toolFromCode, chargeDetails, rentalDayCount, discountPercent, checkoutDate);
+		int parsedRentalDaysCount = parseRentalDayCount(rentalDayCount);
+		int parsedDiscountPercent = parseDiscountPercent(discountPercent);
+		LocalDate parsedCheckoutDate = parseCheckoutDate(checkoutDate);
+
+		RentalAgreement agreement = new RentalAgreement(toolFromCode, chargeDetails, parsedRentalDaysCount, parsedDiscountPercent, parsedCheckoutDate);
 		return agreement;
 	}
 	
@@ -30,30 +36,28 @@ public class CheckoutService {
 		}
 	}
 	
-	public void validateDiscountPercent(int discountPercent) throws Exception {
-		if (discountPercent < 0 || discountPercent > 100) {
+	public int parseDiscountPercent(String discountPercent) throws Exception {
+		int discountPercentInt = Integer.parseInt(discountPercent);
+		if (discountPercentInt < 0 || discountPercentInt > 100) {
 			throw new Exception("Percentage should be an integer between 0 and 100 inclusive.");
 		}
+		return discountPercentInt;
 	}
 	
-	public void validateRentalDayCount(int rentalDayCount) throws Exception {
-		if (rentalDayCount < 1) {
+	public int parseRentalDayCount(String rentalDayCount) throws Exception {
+		int rentalDays = Integer.parseInt(rentalDayCount);
+		if (rentalDays < 1) {
 			throw new Exception("Number of rental days should be an integer greater than or equal to 1.");
 		}
+		return rentalDays;
 	}
 	
-	private void validateInputs(String toolCode, int rentalDayCount, int discountPercent) throws Exception {
-		if (!repository.isToolAvailable(toolCode)) {
-			throw new Exception("Invalid tool code provided.");
-		}
-
-		if (rentalDayCount < 1) {
-			throw new Exception("Number of rental days should be an integer greater than or equal to 1.");
-		}
-		if (discountPercent < 0 || discountPercent > 100) {
-			throw new Exception("Percentage should be an integer between 0 and 100 inclusive.");
+	public LocalDate parseCheckoutDate(String checkoutDate) throws Exception {
+		try {
+			return LocalDate.parse(checkoutDate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+		} catch (DateTimeParseException e) {
+			throw new Exception("Invalid checkout date format provided, use MM/dd/yyyy format.");
 		}
 	}
-	
 	
 }

@@ -12,44 +12,39 @@ public class CheckoutApplication {
         Scanner scanner = new Scanner(System.in);
         CheckoutState checkoutState = CheckoutState.GetToolCode;
         CheckoutService checkoutService = new CheckoutService();
-        RentalAgreement agreement;
         
-        String toolCode = null;
-        int rentalDayCount = 1;
-        int discountPercent = 0;
-        LocalDate checkoutDate = null;
+        String toolCode = "";
+        String rentalDayCount = "";
+        String discountPercent = "";
+        String checkoutDate = "";
         boolean interactiveInput = true;
         
         System.out.println("Checkout an item here:");
 
         while (interactiveInput) {
-
             switch (checkoutState) {
                 case GetToolCode:
                     System.out.print("Enter tool code: ");
                     toolCode = scanner.nextLine();
-                    checkoutService.validateToolCode(toolCode);
                     checkoutState = CheckoutState.GetRentalDayCount;
                     break;
                 case GetRentalDayCount:
                     System.out.print("Enter the number of days you want to rent the tool: ");
-                    rentalDayCount = Integer.parseInt(scanner.nextLine());    
-                    checkoutService.validateRentalDayCount(rentalDayCount);
+                    rentalDayCount = scanner.nextLine();    
                     checkoutState = CheckoutState.GetDiscountPercent;
                     break;
                 case GetDiscountPercent:
                     System.out.print("Enter the discount percentage (whole number between 0-100): ");
-                    discountPercent = Integer.parseInt(scanner.nextLine());   
-                    checkoutService.validateDiscountPercent(discountPercent);
+                    discountPercent = scanner.nextLine();   
                     checkoutState = CheckoutState.GetCheckoutDate;
                     break;
                 case GetCheckoutDate:
                     System.out.print("Enter the checkout date (in mm/dd/yyyy format): ");
-                    checkoutDate = LocalDate.parse(scanner.nextLine());   
+                    checkoutDate = scanner.nextLine();   
                     checkoutState = CheckoutState.GenerateRentalAgreement;
                     break;
                 case GenerateRentalAgreement:
-                	agreement = checkoutService.generateRentalAgreement(toolCode, rentalDayCount, discountPercent, checkoutDate);
+                    RentalAgreement agreement = checkoutService.generateRentalAgreement(toolCode, rentalDayCount, discountPercent, checkoutDate);
                     System.out.println(agreement.toString());
                     interactiveInput = false;
                     break;
@@ -62,24 +57,5 @@ public class CheckoutApplication {
         }
 
         scanner.close();
-    }
-
-    private void printCheckoutTextPrompt(CheckoutState state) {
-        switch (state) {
-            case GetToolCode:
-                System.out.print("Enter tool code: ");
-                break;
-            case GetRentalDayCount:
-                System.out.print("Enter the number of days you want to rent the tool: ");
-                break;
-            case GetDiscountPercent:
-                System.out.print("Enter the discount percentage (whole number between 0-100): ");
-                break;
-            case GetCheckoutDate:
-                System.out.print("Enter the checkout date (in mm/dd/yyyy format): ");
-                break;
-            default:
-                break;
-        }
     }
 }
