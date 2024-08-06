@@ -19,35 +19,34 @@ public class ChargeTableEntry {
     private boolean weekendCharge;
 
     private boolean holidayCharge;
-    
-    public ChargeTableEntry(ToolType toolType, 
-    		BigDecimal dailyCharge, boolean weekdayCharge, 
-    		boolean weekendCharge, boolean holidayCharge) {
+
+    public ChargeTableEntry(ToolType toolType, BigDecimal dailyCharge, boolean weekdayCharge, boolean weekendCharge,
+            boolean holidayCharge) {
         this.tooltype = toolType;
         this.dailyCharge = dailyCharge;
         this.weekdayCharge = weekdayCharge;
         this.weekendCharge = weekendCharge;
         this.holidayCharge = holidayCharge;
     }
-    
+
     public ToolType getToolType() {
-    	return tooltype;
+        return tooltype;
     }
-    
+
     public BigDecimal getDailyCharge() {
-    	return dailyCharge;
+        return dailyCharge;
     }
-    
+
     public boolean getWeekdayCharge() {
-    	return weekdayCharge;
+        return weekdayCharge;
     }
-    
+
     public boolean getWeekendCharge() {
-    	return weekendCharge;
+        return weekendCharge;
     }
-    
+
     public boolean getHolidayCharge() {
-    	return holidayCharge;
+        return holidayCharge;
     }
-    
+
 }

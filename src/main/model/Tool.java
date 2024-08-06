@@ -2,6 +2,7 @@ package main.model;
 
 /**
  * Class model for a tool
+ * 
  * @author matthew
  *
  */
@@ -11,13 +12,13 @@ public class Tool {
     private ToolType toolType;
 
     private String brand;
-    
+
     public Tool(String code, ToolType toolType, String brand) {
-    	this.code = code;
-    	this.toolType = toolType;
-    	this.brand = brand;
+        this.code = code;
+        this.toolType = toolType;
+        this.brand = brand;
     }
-    
+
     public String getCode() {
         return code;
     }

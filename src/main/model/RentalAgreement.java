@@ -15,7 +15,7 @@ import main.utils.CalendarUtils;
  *
  */
 public class RentalAgreement {
-	
+
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yy");
 
     private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
@@ -23,79 +23,79 @@ public class RentalAgreement {
     private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance();
 
     private Tool tool;
-    
+
     private ChargeTableEntry chargeDetails;
-        
+
     private int rentalDays;
-    
+
     private int chargeDays;
-    
+
     private LocalDate checkoutDate;
-    
+
     private LocalDate dueDate;
-    
+
     private BigDecimal dailyCharge;
-    
+
     private BigDecimal preDiscountCharge;
-    
+
     private int discountPercent;
-    
+
     private BigDecimal discountAmount;
-    
+
     private BigDecimal finalCharge;
 
+    public RentalAgreement(Tool tool, ChargeTableEntry chargeDetails, int rentalDays, int discountPercent,
+            LocalDate checkout) {
+        this.tool = tool;
+        this.chargeDetails = chargeDetails;
+        this.rentalDays = rentalDays;
+        this.discountPercent = discountPercent;
+        this.checkoutDate = checkout;
+        this.dailyCharge = chargeDetails.getDailyCharge();
+        PERCENT_FORMAT.setMaximumFractionDigits(0);
 
-	public RentalAgreement(Tool tool, ChargeTableEntry chargeDetails, int rentalDays, int discountPercent, LocalDate checkout) {
-		this.tool = tool;
-		this.chargeDetails = chargeDetails;
-		this.rentalDays = rentalDays;
-		this.discountPercent = discountPercent;
-		this.checkoutDate = checkout;
-		this.dailyCharge = chargeDetails.getDailyCharge();
-	    PERCENT_FORMAT.setMaximumFractionDigits(0);
-	    
-	    setDueDate();
-	    setChargeDays();
-	    setPreDiscountCharge();
-	    setDiscountAmount();
-	    setFinalCharge();
-	}
-	
-	private void setDueDate() {
-		dueDate = checkoutDate.plusDays(rentalDays);
-	}
-	
-	private void setChargeDays() {
-		int total = 0;
+        setDueDate();
+        setChargeDays();
+        setPreDiscountCharge();
+        setDiscountAmount();
+        setFinalCharge();
+    }
+
+    private void setDueDate() {
+        dueDate = checkoutDate.plusDays(rentalDays);
+    }
+
+    private void setChargeDays() {
+        int total = 0;
         for (LocalDate date = checkoutDate; date.isBefore(dueDate); date = date.plusDays(1)) {
             boolean isWeekend = CalendarUtils.isHoliday(date);
             boolean isHoliday = CalendarUtils.isWeekend(date);
-            
-        	if (isWeekend) {
-            	total += chargeDetails.getHolidayCharge() ? 1 : 0;
+
+            if (isWeekend) {
+                total += chargeDetails.getHolidayCharge() ? 1 : 0;
             } else if (isHoliday) {
-            	total += chargeDetails.getWeekendCharge() ? 1 : 0;
+                total += chargeDetails.getWeekendCharge() ? 1 : 0;
             } else if (chargeDetails.getWeekdayCharge()) {
-            	total++;
+                total++;
             }
         }
         chargeDays = total;
-	}
-	
-	private void setPreDiscountCharge() {
-		BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
-		preDiscountCharge = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-	
-	private void setDiscountAmount() {
-		BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
-		unroundedResult = unroundedResult.multiply(BigDecimal.valueOf(0.01));
-		discountAmount = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-	
-	private void setFinalCharge() {
-		finalCharge = preDiscountCharge.subtract(discountAmount);
-	}
+    }
+
+    private void setPreDiscountCharge() {
+        BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
+        preDiscountCharge = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    private void setDiscountAmount() {
+        BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
+        unroundedResult = unroundedResult.multiply(BigDecimal.valueOf(0.01));
+        discountAmount = unroundedResult.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    private void setFinalCharge() {
+        finalCharge = preDiscountCharge.subtract(discountAmount);
+    }
     
     public Tool getTool() {
         return tool;
@@ -114,7 +114,7 @@ public class RentalAgreement {
     }
     
     public LocalDate getDueDate() {
-    	return dueDate;
+        return dueDate;
     }
     
     public BigDecimal getDailyCharge() {
@@ -130,7 +130,7 @@ public class RentalAgreement {
     }
     
     public int getChargeDays() {
-    	return chargeDays;
+        return chargeDays;
     }
 
     public BigDecimal getDiscountAmount() {
@@ -142,9 +142,9 @@ public class RentalAgreement {
     }
     
     public String toString() {
-    	return "Tool code: " + tool.getCode() +
-    			"\nTool type: " + tool.getToolType() +
-    			"\nTool brand: " + tool.getBrand() +
+        return "Tool code: " + tool.getCode() +
+                "\nTool type: " + tool.getToolType() +
+                "\nTool brand: " + tool.getBrand() +
                 "\nRental Days: " + rentalDays +
                 "\nCheck out Date: " + checkoutDate.format(DATE_FORMAT) +
                 "\nDue Date: " + dueDate.format(DATE_FORMAT) +
