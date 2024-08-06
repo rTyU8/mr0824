@@ -2,6 +2,7 @@ package main.service;
 
 import java.time.LocalDate;
 
+import main.model.ChargeTableEntry;
 import main.model.RentalAgreement;
 import main.model.Tool;
 import main.repository.ToolRepository;
@@ -18,7 +19,8 @@ public class CheckoutService {
 			int discountPercent, LocalDate checkoutDate) throws Exception {
 		validateInputs(toolCode, rentalDayCount, discountPercent);
 		Tool toolFromCode = repository.getTool(toolCode);
-		RentalAgreement agreement = new RentalAgreement(toolFromCode, rentalDayCount, discountPercent, checkoutDate);
+		ChargeTableEntry chargeDetails = repository.getChargeDetails(toolFromCode.getToolType());
+		RentalAgreement agreement = new RentalAgreement(toolFromCode, chargeDetails, rentalDayCount, discountPercent, checkoutDate);
 		return agreement;
 	}
 	

@@ -6,12 +6,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 
+import main.utils.CalendarUtils;
+
 public class RentalAgreement {
 
     private Tool tool;
     
     private ChargeTableEntry chargeDetails;
-    
+        
     private int rentalDays;
     
     private int chargeDays;
@@ -20,7 +22,7 @@ public class RentalAgreement {
     
     private LocalDate dueDate;
     
-    private double dailyCharge;
+    private BigDecimal dailyCharge;
     
     private BigDecimal preDiscountCharge;
     
@@ -37,37 +39,55 @@ public class RentalAgreement {
     private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance();
 
 
-	public RentalAgreement(Tool tool, int rentalDays, int discountPercent, LocalDate checkout) {
+	public RentalAgreement(Tool tool, ChargeTableEntry chargeDetails, 
+			int rentalDays, int discountPercent, LocalDate checkout) {
 		this.tool = tool;
+		this.chargeDetails = chargeDetails;
 		this.rentalDays = rentalDays;
 		this.discountPercent = discountPercent;
 		this.checkoutDate = checkout;
 	    PERCENT_FORMAT.setMaximumFractionDigits(0);
 	    
-	    setDueDate(rentalDays, checkoutDate);
-	    
+	    setDueDate();
+	    setChargeDays();
+	    setPreDiscountCharge();
+	    setDiscountAmount();
+	    setFinalCharge();
 	}
 	
-	private void setDueDate(int rentalDays, LocalDate checkoutDate) {
-		this.dueDate = checkoutDate.plusDays(rentalDays);
+	private void setDueDate() {
+		dueDate = checkoutDate.plusDays(rentalDays);
 	}
 	
 	private void setChargeDays() {
-		
+		int total = 0;
+        for (LocalDate date = checkoutDate; date.isBefore(dueDate); date = date.plusDays(1)) {
+            boolean isWeekend = CalendarUtils.isHoliday(date);
+            boolean isHoliday = CalendarUtils.isWeekend(date);
+            
+        	if (isWeekend) {
+            	total += chargeDetails.getHolidayCharge() ? 1 : 0;
+            } else if (isHoliday) {
+            	total += chargeDetails.getWeekendCharge() ? 1 : 0;
+            } else if (chargeDetails.getWeekdayCharge()) {
+            	total++;
+            }
+        }
+        chargeDays = total;
 	}
 	
 	private void setPreDiscountCharge() {
 		BigDecimal unroundedResult = dailyCharge.multiply(BigDecimal.valueOf(chargeDays));
-		this.preDiscountCharge = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+		preDiscountCharge = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
 	}
 	
 	private void setDiscountAmount() {
 		BigDecimal unroundedResult = preDiscountCharge.multiply(BigDecimal.valueOf(discountPercent));
-		this.discountAmount = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
+		discountAmount = unroundedResult.setScale(BigDecimal.ROUND_HALF_UP);
 	}
 	
 	private void setFinalCharge() {
-		this.finalCharge = preDiscountCharge.subtract(discountAmount);
+		finalCharge = preDiscountCharge.subtract(discountAmount);
 	}
     
     public Tool getTool() {
@@ -86,7 +106,7 @@ public class RentalAgreement {
         return checkoutDate;
     }
     
-    public double getDailyCharge() {
+    public BigDecimal getDailyCharge() {
         return dailyCharge;
     }
 
