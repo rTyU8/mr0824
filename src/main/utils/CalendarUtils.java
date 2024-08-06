@@ -4,6 +4,13 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
+/**
+ * 
+ * @author matthew
+ *
+ * Utility class for checking if a given day is a holiday or
+ * weekend.
+ */
 public class CalendarUtils {
 	
 	public static boolean isWeekend(LocalDate date) {

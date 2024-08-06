@@ -9,6 +9,13 @@ import main.model.RentalAgreement;
 import main.model.Tool;
 import main.repository.ToolRepository;
 
+/**
+ * Checkout Service for generating a rental agreement
+ * Also provides functionality for parsing inputs.
+ * 
+ * @author matthew
+ *
+ */
 public class CheckoutService {
 
 	private ToolRepository repository;

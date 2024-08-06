@@ -2,6 +2,12 @@ package main.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Models charge info for a tool.
+ * 
+ * @author matthew
+ *
+ */
 public class ChargeTableEntry {
 
     private ToolType tooltype;

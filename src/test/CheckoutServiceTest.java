@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +13,17 @@ import org.junit.Test;
 import main.model.RentalAgreement;
 import main.service.CheckoutService;
 
-
+/**
+ * Test cases for CheckoutService
+ * @author matthew
+ *
+ */
 public class CheckoutServiceTest {
 	
 	private CheckoutService checkoutService;
 	
     @Before
     public void setUp() {
-        // Initialize the Calculator object before each test
         checkoutService = new CheckoutService();
     }
 	
@@ -38,6 +42,7 @@ public class CheckoutServiceTest {
     	RentalAgreement agreement = checkoutService.generateRentalAgreement("LADW", "3", "10", "07/02/2020");
 
     	assertEquals(3, agreement.getRentalDays());
+    	assertEquals(LocalDate.of(2020, 07, 5), agreement.getDueDate());
     	assertTrue(BigDecimal.valueOf(1.99).compareTo(agreement.getDailyCharge()) == 0);
     	
     	assertEquals(2, agreement.getChargeDays());
@@ -51,7 +56,9 @@ public class CheckoutServiceTest {
     @Test
     public void testCase3() throws Exception {
     	RentalAgreement agreement = checkoutService.generateRentalAgreement("CHNS", "5", "25", "07/02/2015");
+    	
     	assertEquals(5, agreement.getRentalDays());
+    	assertEquals(LocalDate.of(2015, 07, 7), agreement.getDueDate());
     	assertTrue(BigDecimal.valueOf(1.49).compareTo(agreement.getDailyCharge()) == 0);
     	
     	assertEquals(3, agreement.getChargeDays());
@@ -68,6 +75,7 @@ public class CheckoutServiceTest {
     	RentalAgreement agreement = checkoutService.generateRentalAgreement("JAKD", "6", "0", "09/03/2015");
     	
     	assertEquals(6, agreement.getRentalDays());
+    	assertEquals(LocalDate.of(2015, 9, 9), agreement.getDueDate());
     	assertTrue(BigDecimal.valueOf(2.99).compareTo(agreement.getDailyCharge()) == 0);
     	
     	assertEquals(3, agreement.getChargeDays());
@@ -83,6 +91,7 @@ public class CheckoutServiceTest {
     	RentalAgreement agreement = checkoutService.generateRentalAgreement("JAKR", "9", "0", "07/02/2015");
 
     	assertEquals(9, agreement.getRentalDays());
+    	assertEquals(LocalDate.of(2015, 7, 11), agreement.getDueDate());
     	assertTrue(BigDecimal.valueOf(2.99).compareTo(agreement.getDailyCharge()) == 0);
     	
     	assertEquals(6, agreement.getChargeDays());
@@ -98,6 +107,7 @@ public class CheckoutServiceTest {
     	RentalAgreement agreement = checkoutService.generateRentalAgreement("JAKR", "4", "50", "07/02/2020");
 
     	assertEquals(4, agreement.getRentalDays());
+    	assertEquals(LocalDate.of(2020, 7, 6), agreement.getDueDate());
     	assertTrue(BigDecimal.valueOf(2.99).compareTo(agreement.getDailyCharge()) == 0);
 
     	assertEquals(1, agreement.getChargeDays());

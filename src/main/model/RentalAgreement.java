@@ -2,13 +2,25 @@ package main.model;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import main.utils.CalendarUtils;
 
+/**
+ * Model class for a rental agreement
+ * 
+ * @author matthew
+ *
+ */
 public class RentalAgreement {
+	
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yy");
+
+    private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
+
+    private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance();
 
     private Tool tool;
     
@@ -31,16 +43,9 @@ public class RentalAgreement {
     private BigDecimal discountAmount;
     
     private BigDecimal finalCharge;
-    
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
-
-    private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getCurrencyInstance(Locale.US);
-
-    private static final NumberFormat PERCENT_FORMAT = NumberFormat.getPercentInstance();
 
 
-	public RentalAgreement(Tool tool, ChargeTableEntry chargeDetails, 
-			int rentalDays, int discountPercent, LocalDate checkout) {
+	public RentalAgreement(Tool tool, ChargeTableEntry chargeDetails, int rentalDays, int discountPercent, LocalDate checkout) {
 		this.tool = tool;
 		this.chargeDetails = chargeDetails;
 		this.rentalDays = rentalDays;
@@ -108,6 +113,10 @@ public class RentalAgreement {
         return checkoutDate;
     }
     
+    public LocalDate getDueDate() {
+    	return dueDate;
+    }
+    
     public BigDecimal getDailyCharge() {
         return dailyCharge;
     }
@@ -137,12 +146,12 @@ public class RentalAgreement {
     			"\nTool type: " + tool.getToolType() +
     			"\nTool brand: " + tool.getBrand() +
                 "\nRental Days: " + rentalDays +
-                "\nCheck out Date: " + DATE_FORMAT.format(checkoutDate) +
-                "\nDue Date: " + DATE_FORMAT.format(dueDate) +
+                "\nCheck out Date: " + checkoutDate.format(DATE_FORMAT) +
+                "\nDue Date: " + dueDate.format(DATE_FORMAT) +
                 "\nDaily Rental Charge: " + CURRENCY_FORMAT.format(dailyCharge) +
                 "\nCharge Days: " + chargeDays +
                 "\nPre-Discount Charge: " + CURRENCY_FORMAT.format(preDiscountCharge) +
-                "\nDiscount Percent: " + PERCENT_FORMAT.format(discountPercent) +
+                "\nDiscount Percent: " + PERCENT_FORMAT.format(.01 * discountPercent) +
                 "\nDiscount Amount: " + CURRENCY_FORMAT.format(discountAmount) +
                 "\nFinal Charge: " + CURRENCY_FORMAT.format(finalCharge);
     }

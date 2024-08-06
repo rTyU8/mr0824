@@ -8,6 +8,13 @@ import main.model.ChargeTableEntry;
 import main.model.Tool;
 import main.model.ToolType;
 
+
+/**
+ * Repository class for tools
+ * 
+ * @author matthew
+ *
+ */
 public class ToolRepository {
     
 	private Map<String, Tool> toolSupply;
@@ -23,11 +30,11 @@ public class ToolRepository {
 		toolSupply.put("JAKR", new Tool("JAKR", ToolType.Jackhammer, "Ridgid"));
 		
 		chargeTable.put(ToolType.Ladder, 
-				new ChargeTableEntry(ToolType.Ladder, BigDecimal.valueOf(1.99), true, true, false));
+			new ChargeTableEntry(ToolType.Ladder, BigDecimal.valueOf(1.99), true, true, false));
 		chargeTable.put(ToolType.Chainsaw, 
-				new ChargeTableEntry(ToolType.Chainsaw, BigDecimal.valueOf(1.49), true, false, true));
+			new ChargeTableEntry(ToolType.Chainsaw, BigDecimal.valueOf(1.49), true, false, true));
 		chargeTable.put(ToolType.Jackhammer, 
-				new ChargeTableEntry(ToolType.Jackhammer, BigDecimal.valueOf(2.99), true, false, false));
+			new ChargeTableEntry(ToolType.Jackhammer, BigDecimal.valueOf(2.99), true, false, false));
 	}
 	
 	public boolean isToolAvailable(String toolCode) {

@@ -1,5 +1,10 @@
 package main.model;
 
+/**
+ * Class model for a tool
+ * @author matthew
+ *
+ */
 public class Tool {
     private String code;
 

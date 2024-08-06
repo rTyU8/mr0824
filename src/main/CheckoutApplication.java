@@ -1,12 +1,20 @@
 package main;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 import main.model.CheckoutState;
 import main.model.RentalAgreement;
 import main.service.CheckoutService;
 
+/**
+ * Main application class for 
+ * generating a rental agreement.
+ * Takes input from command line and
+ * prints out the generated rental
+ * agreement.
+ * 
+ * @author matthew
+ */
 public class CheckoutApplication {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
